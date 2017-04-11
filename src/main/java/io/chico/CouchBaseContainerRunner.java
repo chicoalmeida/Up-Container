@@ -6,10 +6,15 @@ import org.testcontainers.containers.GenericContainer;
 /**
  * Created by Francisco Almeida.
  */
-public class CouchBaseContainerRunner {
+public class CouchBaseContainerRunner implements AutoCloseable{
 
     private static final String COUCHBASE_LATEST = "couchbase:latest";
     private static final String COUCHBASE_LATEST_LABEL = "couchbase:default";
+
+    @Override
+    public void close() throws Exception {
+        couchbaseContainer.stop();
+    }
 
     public enum Status {SUCCESS, FAILURE}
 
@@ -26,10 +31,6 @@ public class CouchBaseContainerRunner {
 
         couchbaseContainer.start();
         return couchbaseContainer.isRunning() ? Status.SUCCESS : Status.FAILURE;
-    }
-
-    public static void shutdown() {
-        couchbaseContainer.stop();
     }
 
 }
